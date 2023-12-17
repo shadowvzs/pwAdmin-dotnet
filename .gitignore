@@ -1,0 +1,27 @@
+.DS_Store
+
+# dotnet core
+bin/
+obj/
+project.lock.json
+NuGetScratch/
+
+# node
+node_modules/
+typings/
+npm-debug.log
+
+# client-react
+*/**/wwwroot/*
+
+# ops
+ops/hosts
+ops/config.yml
+ops/*.retry
+
+# other
+*.js.map
+
+# IDE
+.idea/
+.vs/

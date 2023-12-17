@@ -1,0 +1,7 @@
+**/*.js
+*.js
+./*.json
+**/*.d.ts
+**/*.css
+**/src/types/api/*
+**/src/**/html-encoder.ts
