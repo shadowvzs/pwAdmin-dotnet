@@ -9,7 +9,7 @@ const Layout = () => (
         <section className="layout h-full w-full grid grid-cols-[240px_auto] grid-rows-[60px_auto_40px]">
             <Header />
             <Aside />
-            <main className='bg-[#ffffee]'>
+            <main className='bg-[#ffffee] h-full'>
                 <AppRoutes />
             </main>
             <Footer />

@@ -60,6 +60,7 @@ export class AppStore extends Disposable implements IAppStore {
         this.modalService = modalService.init({ app: this, containerSelector: '#modalRoot' });
         this.container = getContainer();
         this.userService = this.container.get<IUserService>(TOKEN.IUserService);
+        this.serverService = this.container.get<IServerService>(TOKEN.IServerService);
 
         setTimeout(() => {
             this.setLoading(false);

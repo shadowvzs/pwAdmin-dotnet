@@ -34,6 +34,12 @@ const productionPlugins = [
     }),
 ];
 
+/*
+    new MiniCssExtractPlugin({
+        filename: '[name].[fullhash].css',
+        chunkFilename: '[id].[fullhash].css',
+    }),
+*/
 const developmentPlugins = [
     // new ReactRefreshPlugin(),
     new webpack.DefinePlugin({
@@ -58,7 +64,7 @@ const developmentPlugins = [
     }),
 ];
 
-module.exports = smp.wrap({
+module.exports = {
     mode: development ? 'development' : 'production',
 
     context: __dirname,
@@ -75,10 +81,10 @@ module.exports = smp.wrap({
     output: {
         path: path.resolve(__dirname, '../wwwroot'),
         // publicPath: 'http://localhost:5000/',
-        filename: 'bundle.js', // development ? '[name].js' : '[name].[fullhash].js',
-        publicPath: 'http://localhost:8080/',
-        libraryTarget: 'umd',
-        library: 'PWAdmin',
+        filename: development ? '[name].js' : '[name].[fullhash].js',
+        publicPath: 'http://localhost:5000/',
+        // libraryTarget: 'umd',
+        // library: 'PWAdmin',
     },
 
     resolve: {
@@ -124,7 +130,21 @@ module.exports = smp.wrap({
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader", "postcss-loader"],
+                use: [
+                    development ? "style-loader" : MiniCssExtractPlugin.loader,
+                    {
+                        loader: "css-loader",
+                        options: {
+                            importLoaders: 1,
+                            sourceMap: false,
+                            esModule: false,
+                        }
+                    },
+                    "postcss-loader"
+                ],
+                include: /src/,
+                exclude: /node_modules/,
+                sideEffects: true,
             },
         ],
     },
@@ -142,4 +162,4 @@ module.exports = smp.wrap({
             ],
         }
         : undefined,
-});
+};

@@ -4,8 +4,14 @@ import { observer } from 'mobx-react-lite';
 import { Route } from '@shadowvzs/react-view-router';
 import HomePage from '@pages/home';
 import UsersPage from '@pages/users';
+import ServerPage from '@pages/server';
 
 const routes = [
+    {
+        path: '',
+        ViewStore: HomePage.View,
+        Cmp: HomePage.Cmp,
+    },
     {
         path: '/',
         ViewStore: HomePage.View,
@@ -18,8 +24,8 @@ const routes = [
     },
     {
         path: '/servers',
-        ViewStore: UsersPage.View,
-        Cmp: UsersPage.Cmp,
+        ViewStore: ServerPage.View,
+        Cmp: ServerPage.Cmp,
     },
 ];
 

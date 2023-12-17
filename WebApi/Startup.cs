@@ -151,11 +151,11 @@ namespace WebApi
             app.UseCsp(opt => opt
                 .ReportUris(r => r.Uris("/"))
                 .BlockAllMixedContent()
-                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
                 .ScriptSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-lYd7smU36stEaC+qXwEU+xLEbTjbnlQVYZvBi2Mf59E="))
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=").UnsafeInline())
             );
             
             var dir = AppDomain.CurrentDomain.BaseDirectory;

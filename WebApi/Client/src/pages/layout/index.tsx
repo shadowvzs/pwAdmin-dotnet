@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import MemberLayout from '@pages/layout/member';
 import GuestLayout from '@pages/layout/guest';
 import { AppContext } from '@app/Provider';
-import './style.css';
+import './tailwind.css';
 
 const layoutMap = {
     guest: GuestLayout,

@@ -13,7 +13,7 @@ const Cmp = observer(({ store }: { store: IView }) => {
                 <h3 className='text-lg font-bold'>Users Table</h3>
                 <p className='py-4'>
                     <b>Note:</b>
-                        <span className='flex gap-2'>''
+                        <span className='flex gap-2'>
                             <span className='text-red-600'>Red - Admin</span>,
                             <span className='text-blue-600'>Blue - GM</span>,
                             <span>* - Online</span>

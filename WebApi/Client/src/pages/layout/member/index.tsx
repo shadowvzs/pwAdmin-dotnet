@@ -5,11 +5,13 @@ import Footer from '@pages/layout/member/Footer';
 import './member.css';
 
 const Layout = () => (
-        <section className="layout h-full w-full grid grid-rows-[60px_auto_40px]">
-            <Header />
+    <section className="layout h-full w-full grid grid-rows-[60px_auto_40px]">
+        <Header />
+        <main className='bg-[#ffffee] h-full'>
             <AppRoutes />
-            <Footer />
-        </section>
-    );
+        </main>
+        <Footer />
+    </section>
+);
 
 export default Layout;
