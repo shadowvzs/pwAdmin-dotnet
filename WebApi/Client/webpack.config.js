@@ -80,9 +80,9 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, '../wwwroot'),
-        // publicPath: 'http://localhost:5000/',
+        publicPath: 'auto',
         filename: development ? '[name].js' : '[name].[fullhash].js',
-        publicPath: 'http://localhost:5000/',
+        // publicPath: 'http://localhost:5000/',
         // libraryTarget: 'umd',
         // library: 'PWAdmin',
     },
