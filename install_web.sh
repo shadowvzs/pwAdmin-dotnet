@@ -8,7 +8,7 @@ websitePath=/var/www/html
 #dbName="db name, usually pw"
 #pwAdminId="pw admin user id"
 #pwAdminSalt="pw admin salt"
-
+apt install -y gpg
 wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg
 cat > /etc/apt/sources.list.d/microsoft.sources << EOF
 Types: deb
