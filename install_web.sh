@@ -40,4 +40,5 @@ npm run build
 cd $dotnetWebPath
 export DOTNET_ROLL_FORWARD=LatestMajor
 dotnet build
-dotnet run --project WebApi
+# do not start the server
+#dotnet run --project WebApi
