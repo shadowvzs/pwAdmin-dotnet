@@ -80,7 +80,6 @@ namespace WebApi
                 options.SchemaFilter<NullableSchemaFilter>();
                 // enforce to create the following types
                 options.DocumentFilter<CustomModelDocumentFilter<UserListQuery>>();
-                options.DocumentFilter<CustomModelDocumentFilter<ManageInstancesCommand>>();
                 options.DocumentFilter<CustomModelDocumentFilter<CheckInstancesStatusQuery>>();
                 // custom type generation ending
                 options.OperationFilter<AddHeader>();

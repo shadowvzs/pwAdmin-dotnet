@@ -24,13 +24,17 @@ namespace Application.Servers
             public async Task<List<ServerInstanceStatusDto>> Handle(CheckInstancesStatusQuery request, CancellationToken cancellationToken)
             {
                 Process process = new Process();
-                process.StartInfo.WorkingDirectory = InstanceList.ServerRoot;
-                process.StartInfo.FileName = "/bin/bash";
-                process.StartInfo.Arguments = "ps -A w";
+                process.StartInfo.FileName = "/bin/ps";
+                process.StartInfo.Arguments = "-A w";
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
-                process.OutputDataReceived += (s, e) => result.Add(e.Data); // new DataReceivedEventHandler(OutputHandler);
+                process.OutputDataReceived += (s, e) => {
+                    if (!String.IsNullOrEmpty(e.Data))
+                    {
+                        result.Add(e.Data);
+                    }
+                };
                 process.Start();
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();

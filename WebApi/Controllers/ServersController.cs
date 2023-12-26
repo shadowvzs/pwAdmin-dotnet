@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         ///</Summary>
         [Authorize]
         [HttpPost("manage-instances")]
-        public async Task ManageInstances([FromQuery] ManageInstances.ManageInstancesCommand query)
+        public async Task ManageInstances(ManageInstances.ManageInstancesCommand query)
         {
             await Mediator.Send(query);
         }

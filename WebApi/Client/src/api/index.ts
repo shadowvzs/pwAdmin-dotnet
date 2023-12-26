@@ -1,5 +1,4 @@
-import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 import type { AxiosResponse, HttpMethods } from '@ts/types';
 import type { BaseApi } from '@ts/apis';
@@ -7,6 +6,7 @@ import rolesApi from './roles-api';
 import usersApi from './users-api';
 import serversApi from './servers-api';
 
+const apis: AxiosInstance[] = [];
 export const createServiceFromApi = <T = unknown>(list: Record<string, string>, api: AxiosInstance) => {
     // api.interceptors.response.use(res => {
     //     if (res.data && typeof res.data === 'object') {
@@ -67,11 +67,13 @@ export const createServiceFromApi = <T = unknown>(list: Record<string, string>, 
 
     Reflect.set(strictApi as BaseApi, '$request', api);
     Reflect.set(strictApi as BaseApi, '$setBearerToken', (token?: string) => {
-        if (token) {
-            Reflect.set(api.defaults.headers.common, 'Authorization', `Bearer ${token}`);
-        } else {
-            Reflect.deleteProperty(api.defaults.headers.common, 'Authorization');
-        }
+        apis.forEach(a => {
+            if (token) {
+                Reflect.set(a.defaults.headers.common, 'Authorization', `Bearer ${token}`);
+            } else {
+                Reflect.deleteProperty(a.defaults.headers.common, 'Authorization');
+            }
+        });
     });
 
     return strictApi;
@@ -90,5 +92,6 @@ export const getApi = <T>(baseApiUrl: string, controller: ControllerName): T => 
         baseURL: baseApiUrl + controller,
         timeout: 1000,
     });
+    apis.push(api);
     return createServiceFromApi<T>(controllerMap[controller], api);
 };
