@@ -27,18 +27,19 @@
         "paths": {
             "@api/*": ["./src/api/*"],
             "@ts/*": ["./src/types/*"],
-            "@hooks/*": ["./src/hooks/*"],
+            "@hooks/*": ["src/app/hooks/*"],
             "@configs/*": ["./src/configs/*"],
             "@utility/*": ["./src/utility/*"],
             "@locales/*": ["./src/locales/*"],
             "@app/*": ["./src/app/*"],
             "@pages/*": ["./src/pages/*"],
-            "@modal/*": ["./src/modal/*"],
+            "@modal/*": ["src/components/modal/*"],
             "@services/*": ["./src/services/*"],
-            "@components/*": ["./src/components/*"]
+            "@components/*": ["./src/components/*"],
+            "@pwserver/*": ["./src/pw-server/*"]
         }
     },
-    "include": ["./src/*", "./src/*.d.ts", "babel.config.js", "**/*.ts", "**/*.tsx"],
+    "include": ["./src/*", "./src/*.d.ts", "babel.config.js", "**/*.ts", "**/*.tsx", "src/components/modal", "src/app/hooks"],
     "exclude": [
         "*.mjs",
         "./postcss.config.js",

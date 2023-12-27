@@ -1,5 +1,5 @@
 import type { Container } from 'inversify';
-import type { ModalService } from 'src/modal';
+import type { ModalService } from '@components/modal';
 
 import type { NavigationFunction } from '@ts/types';
 import type { IDisposable } from '@ts/utilities';

@@ -5,6 +5,7 @@ import { Route } from '@shadowvzs/react-view-router';
 import HomePage from '@pages/home';
 import UsersPage from '@pages/users';
 import ServerPage from '@pages/server';
+import ItemBuilder from '@pages/item-builder';
 
 const routes = [
     {
@@ -26,6 +27,11 @@ const routes = [
         path: '/servers',
         ViewStore: ServerPage.View,
         Cmp: ServerPage.Cmp,
+    },
+    {
+        path: '/item-builder',
+        ViewStore: ItemBuilder.View,
+        Cmp: ItemBuilder.Cmp,
     },
 ];
 

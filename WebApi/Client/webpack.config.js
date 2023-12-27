@@ -57,7 +57,7 @@ const developmentPlugins = [
     }),
     new BundleAnalyzerPlugin(),
     new HtmlWebpackPlugin({
-        template: './index.html',
+        template: './public/index.html',
         filename: 'index.html',
         // favicon: './public/favicon.ico',
         inject: true,

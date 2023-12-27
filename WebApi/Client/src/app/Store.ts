@@ -6,7 +6,7 @@ import TOKEN from '@app/di/token';
 import getContainer from '@app/di/container';
 import Disposable from '@utility/Disposable';
 import { catalog } from '@locales/index';
-import type { ModalService } from 'src/modal';
+import type { ModalService } from '@components/modal';
 import type { IAppStore, IUIStore } from '@ts/stores';
 import type { NavigationFunction } from '@ts/types';
 import type { IRoleService, IServerService, IUserService } from '@ts/services';
@@ -51,7 +51,7 @@ export class AppStore extends Disposable implements IAppStore {
         /**
          * Dynamic imports for core files
          */
-        const { ModalService } = await import('../modal/index');
+        const { ModalService } = await import('../components/modal/index');
 
         /**
          * Init and settings

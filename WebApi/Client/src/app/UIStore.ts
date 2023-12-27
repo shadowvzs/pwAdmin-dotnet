@@ -1,6 +1,6 @@
 import { computed, makeObservable } from 'mobx';
-import LoginModal from '@modal/LoginModal';
-import RegisterModal from '@modal/RegisterModal';
+import LoginModal from '@components/modal/LoginModal';
+import RegisterModal from '@components/modal/RegisterModal';
 import type { IAppStore, IUIStore } from '@ts/stores';
 
 class UIStore implements IUIStore{

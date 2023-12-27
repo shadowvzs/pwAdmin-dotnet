@@ -2,7 +2,7 @@ import React from 'react';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 
-import useConstant from '@hooks/useConstant';
+import useConstant from '@app/hooks/useConstant';
 import type { IAppStore } from '@ts/stores';
 import { AppStore } from './Store';
 import ErrorBoundary from './ErrorBoundary';

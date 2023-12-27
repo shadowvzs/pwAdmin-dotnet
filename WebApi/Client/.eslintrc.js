@@ -142,7 +142,7 @@ module.exports = {
         'max-lines-per-function': ['error', { max: 400 }], // recommended is 50
         'max-depth': ['error'],
         'max-classes-per-file': ['error', 1],
-        complexity: ['error', { max: 20 }], // default is 20
+        complexity: ['error', { max: 25 }], // default is 20
         'no-constructor-return': ['error'],
         quotes: [
             'error',

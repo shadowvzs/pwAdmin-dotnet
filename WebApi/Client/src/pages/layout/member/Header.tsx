@@ -10,9 +10,8 @@ const Header = () => {
             <nav className='flex gap-4'>
                 <Link to='/'>Server Manager</Link>
                 <Link to='/users'>users Manager</Link>
+                <Link to='/item-builder'>Item Builder</Link>
                 <div onClick={uiStore.onLogout}>Logout</div>
-                {/* <Link to='/templates'>Templates</Link>
-                <Link to='/aaaa'>link to /aaaa1</Link> */}
             </nav>
             <aside className='flex gap-4'>
                 {/* {isMobile && <BurgerMenu />}
