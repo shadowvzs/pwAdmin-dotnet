@@ -12,8 +12,8 @@ namespace Application.Servers
 {
     public enum InstanceActionEnum
     {
-        STOP,
-        START
+        STOP = 0,
+        START = 1
     }
 
     public class ManageInstances
@@ -55,30 +55,31 @@ namespace Application.Servers
                 Process process = new Process();
                 if (action == InstanceActionEnum.START)
                 {
-                    process.StartInfo.WorkingDirectory = InstanceList.ServerRoot;
-                    process.StartInfo.FileName = "/bin/bash";
-                    process.StartInfo.Arguments = instance.Command + instance.Command;
+                    process.StartInfo.WorkingDirectory = instance.FolderPath;
+                    process.StartInfo.FileName = instance.AppName;
+                    string arguments = instance.Arguments;
+                    if (instance.Log)
+                    {
+                        // arguments = arguments + " >" + instance.LogFileName;
+                    }
+                    process.StartInfo.Arguments = arguments + " &";
                 }
                 else
                 {
                     if (instance.Type == InstanceTypeEnum.Map)
                     {
-                        process.StartInfo.WorkingDirectory = InstanceList.ServerRoot;
-                        process.StartInfo.FileName = "/bin/bash";
-                        process.StartInfo.Arguments = "kill " + instance.Id;
+                        process.StartInfo.FileName = "/bin/pkill";
+                        process.StartInfo.Arguments = "-f " + instance.Id;
                     }
                     else
                     {
-                        process.StartInfo.WorkingDirectory = InstanceList.ServerRoot;
-                        process.StartInfo.FileName = "/bin/bash";
-                        process.StartInfo.Arguments = "pkill - 9 " + instance.AppName;
+                        process.StartInfo.FileName = "/bin/pkill";
+                        process.StartInfo.Arguments = "-f " + instance.AppName;
                     }
                 }
 
-                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.UseShellExecute = true;
                 process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
                 process.WaitForExit();
             }
         }

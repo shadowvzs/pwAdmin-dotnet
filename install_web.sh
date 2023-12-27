@@ -8,7 +8,7 @@ websitePath=/var/www/html
 #dbName="db name, usually pw"
 #pwAdminId="pw admin user id"
 #pwAdminSalt="pw admin salt"
-
+apt install -y gpg
 wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg
 cat > /etc/apt/sources.list.d/microsoft.sources << EOF
 Types: deb
@@ -40,4 +40,5 @@ npm run build
 cd $dotnetWebPath
 export DOTNET_ROLL_FORWARD=LatestMajor
 dotnet build
-dotnet run --project WebApi
+# do not start the server
+#dotnet run --project WebApi
