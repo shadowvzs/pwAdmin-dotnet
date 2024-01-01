@@ -10,6 +10,8 @@
         "module": "ESNext",
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
         "isolatedModules": false,
         "noEmit": false,
         "target": "ESNext",
@@ -27,7 +29,7 @@
         "paths": {
             "@api/*": ["./src/api/*"],
             "@ts/*": ["./src/types/*"],
-            "@hooks/*": ["src/app/hooks/*"],
+            "@hooks/*": ["src/hooks/*"],
             "@configs/*": ["./src/configs/*"],
             "@utility/*": ["./src/utility/*"],
             "@locales/*": ["./src/locales/*"],

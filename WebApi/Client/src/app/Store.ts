@@ -51,8 +51,7 @@ export class AppStore extends Disposable implements IAppStore {
         /**
          * Dynamic imports for core files
          */
-        const { ModalService } = await import('../components/modal/index');
-
+        const { ModalService } = await import('@components/modal/index');
         /**
          * Init and settings
          */

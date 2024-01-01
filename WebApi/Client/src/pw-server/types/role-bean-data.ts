@@ -1,4 +1,4 @@
-import { Byte, Forbidden, Gender, IItem, Octets } from "./common";
+import { Byte, Forbidden, Gender, IItem, Octets } from './common';
 
 export interface Base {
     version: any;
@@ -100,8 +100,8 @@ export interface Banker {
     fashions: IItem[];
     // if version is 1.5.1+ then
     // cards: [
-    //		cardCap", "UByte" ],
-    // 		items": ["Array", itemScheme] ]
+    //     cardCap", "UByte" ],
+    //     items": ["Array", itemScheme] ]
     // ]
 }
 

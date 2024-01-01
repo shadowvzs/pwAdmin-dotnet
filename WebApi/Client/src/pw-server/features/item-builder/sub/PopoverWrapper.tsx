@@ -1,6 +1,7 @@
-// import { Settings } from "@mui/icons-material";
-// import { Grid, IconButton, Popover, Typography } from "@mui/material";
-import React from "react";
+import React from 'react';
+import { IconButton } from './icons';
+import Input from './core/Input';
+import Popover from './core/Popover';
 
 export interface PopoverWrapperProps<T> {
     value: T;
@@ -16,9 +17,9 @@ export interface PopoverWrapperProps<T> {
     editable?: boolean;
 }
 
-export const PopoverWrapper = (props: PopoverWrapperProps<any>) => {
+export function PopoverWrapper(props: PopoverWrapperProps<any>) {
     const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
-    const { 
+    const {
         BaseCmp,
         Cmp,
         inputStyle,
@@ -26,16 +27,16 @@ export const PopoverWrapper = (props: PopoverWrapperProps<any>) => {
         tooltip,
         title,
         editable,
-        ...rest 
+        ...rest
     } = props;
 
     const handleClick = React.useCallback((event: React.MouseEvent<Element>) => {
-        setAnchorEl(event.currentTarget);
-    }, []);
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    }, [anchorEl]);
 
-    const handleClose = React.useCallback(() => {
-        setAnchorEl(null);
-    }, []);
+    // const handleClose = React.useCallback(() => {
+    //     setAnchorEl(null);
+    // }, []);
 
     const onChange = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         const v = ev.currentTarget.value;
@@ -49,62 +50,45 @@ export const PopoverWrapper = (props: PopoverWrapperProps<any>) => {
     const open = Boolean(anchorEl);
 
     return (
-        <div>
-            <Grid container spacing={0} justifyContent='space-between' alignItems='center'>
+        <div className='relative'>
+            <div className="flex justify-between items-center">
                 {title && (
-                    <Grid item>
-                        <Typography variant='body2' children={title} />
-                    </Grid>
+                    <div className='text-xs'>
+                        {title}
+                    </div>
                 )}
-                <Grid item>
-                    <Grid container alignItems='center' wrap='nowrap'>
-                        <Grid item>
-                            { BaseCmp ? (
-                                <BaseCmp />
-                            ) : (
-                                <input 
-                                    disabled={!editable}
-                                    onChange={onChange}
-                                    value={props.value}
-                                    style={{
-                                        textAlign: 'right',
-                                        padding: '2px 4px',
-                                        width: 70, 
-                                        ...inputStyle
-                                    }}
-                                />
-                            )}
-                        </Grid>
-                        <Grid item>
-                            <IconButton
-                                size='small'
-                                onClick={handleClick}
-                                title={tooltip}
+                <div className="flex flex-nowrap items-center gap-1">
+                    <div>
+                        { BaseCmp ? (
+                            <BaseCmp />
+                        ) : (
+                            <Input
                                 disabled={!editable}
-                                style={{ padding: 0 }}
-                            >
-                                <Settings />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
+                                onChange={onChange}
+                                value={props.value}
+                                style={{
+                                    textAlign: 'right',
+                                    padding: '2px 4px',
+                                    width: 70,
+                                    ...inputStyle
+                                }}
+                            />
+                        )}
+                    </div>
+                    <IconButton
+                        size={20}
+                        icon='settings'
+                        title={tooltip}
+                        onClick={handleClick}
+                        disabled={!editable}
+                    />
+                </div>
+            </div>
             <Popover
                 open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
+                boxStyle={boxStyle}
             >
-                <div style={{ width: 240, ...boxStyle }}>
-                    <Cmp {...rest} />
-                </div>
+                <Cmp {...rest} />
             </Popover>
         </div>
     );

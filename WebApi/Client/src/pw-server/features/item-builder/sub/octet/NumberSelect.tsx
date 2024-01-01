@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { RenderComponentProps } from '../../../../interfaces/builder';
+import { RenderComponentProps } from '@pwserver/types/builder';
+import Input from '../core/Input';
 
 const NumberSelect = (props: RenderComponentProps<number | number[]>) => {
     const { value, onChange, config } = props;
@@ -14,6 +15,7 @@ const NumberSelect = (props: RenderComponentProps<number | number[]>) => {
         if (isRange) {
             const finalValue = [value1, value2];
             finalValue[parseFloat(index!)] = v;
+            // eslint-disable-next-line prefer-destructuring
             if (finalValue[0] > finalValue[1]) { finalValue[0] = finalValue[1]; }
             onChange(finalValue);
         } else if (config.min && !v && v < config.min) {
@@ -26,41 +28,38 @@ const NumberSelect = (props: RenderComponentProps<number | number[]>) => {
     }, [isRange, value1, value2, config, onChange]);
 
     return (
-        <Grid container className='text-xs' alignItems='center' justifyContent='space-between'>
-            <Grid item>
-                <Typography
-                    variant='body2'
-                    children={config.label}
-                />
-            </Grid>
-            <Grid item>
-                <Grid container spacing={1} justifyContent='flex-end'>
-                    <Grid item>
-                        <input
-                            data-index={0}
+        <div className='flex text-xs items-center justify-between w-full gap-4'>
+            <div className='whitespace-nowrap'>
+                {config.label}
+            </div>
+            <div className='flex justify-center gap-2'>
+                <div>
+                    <Input
+                        data-index={0}
+                        type='number'
+                        value={value1 * (config.multiplier || 1)}
+                        onChange={onChangeHandler}
+                        max={config.id.startsWith('grade') ? 20 : undefined}
+                        min={config.id.startsWith('grade') ? 1 : 0}
+                        size={8}
+                        className='text-right max-w-[80px]'
+                    />
+                </div>
+                {isRange && (
+                    <div>
+                        <Input
+                            data-index={1}
                             type='number'
-                            value={value1 * (config.multiplier || 1)}
+                            value={value2 * (config.multiplier || 1)}
                             onChange={onChangeHandler}
-                            className={classes.input}
-                            max={config.id.startsWith('grade') ? 20 : undefined}
-                            min={config.id.startsWith('grade') ? 1 : 0}
+                            min='0'
+                            size={8}
+                            className='text-right max-w-[80px]'
                         />
-                    </Grid>
-                    {isRange && (
-                        <Grid item>
-                            <input
-                                data-index={1}
-                                type='number'
-                                value={value2 * (config.multiplier || 1)}
-                                onChange={onChangeHandler}
-                                className={classes.input}
-                                min='0'
-                            />
-                        </Grid>
-                    )}
-                </Grid>
-            </Grid>
-        </Grid>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
 

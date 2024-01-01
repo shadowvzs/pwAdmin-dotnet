@@ -1,19 +1,9 @@
 import React from 'react';
-// import { makeStyles } from '@mui/styles';
-// import { Grid, NativeSelect } from '@mui/material';
-
 import { observer } from 'mobx-react-lite';
+import PW_SERVER_DATA from '@pwserver/constants/server-data';
 import ItemBuilderStore from '../ItemBuilderStore';
-import { RootStoreContext } from '../../../contexts/RootStoreContext';
-
-const useStyles = makeStyles({
-    input: {
-        width: 50,
-        textAlign: 'right',
-        padding: '2px 4px',
-        marginTop: 2
-    }
-});
+import Input from './core/Input';
+import Select from './core/Select';
 
 interface ItemSelectProps {
     hideTitle?: boolean
@@ -30,17 +20,19 @@ class ItemSelectStore {
 
     public onChangeInput = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         const id = parseInt(ev.currentTarget.value.trim() || '0', 10);
-        if (!isNaN(id)) {
+        if (!Number.isNaN(id)) {
             this.onChange(id);
         }
     };
 
     public onError = (err: React.SyntheticEvent<HTMLImageElement, Event>): void => {
-        if (err.currentTarget.src !== this.getIconPath(0)) {
-            err.currentTarget.src = this.getIconPath(0);
+        const path = this.getIconPath(0);
+        if (err.currentTarget.src !== path) {
+            Reflect.set(err.currentTarget, 'src', path);
         }
     };
 
+    // eslint-disable-next-line class-methods-use-this
     public getIconPath(id: number): string {
         return `./images/icons/items/${id || '0'}.gif`;
     }
@@ -54,50 +46,58 @@ class ItemSelectStore {
 
 const ItemSelect = observer((props: ItemSelectProps) => {
     const iBStore = props.store;
-    const { pwServerStore } = React.useContext(RootStoreContext);
-    const {version} = pwServerStore.data.item_extra;
-    const classes = useStyles();
+    const { version } = PW_SERVER_DATA.item_extra;
     const store = React.useState(() => new ItemSelectStore(v => iBStore.set('id', v), ))[0];
     const menu = iBStore.category;
     const items = iBStore.menuSubCategoryItems[iBStore.currentSubCatId];
 
     return (
-        <div className='min-w-[200px] p-4 font-xs'>
-           <div className='flex flex-col gap-2'>
-                <div>
-                    <div className='flex flex-nowrap gap-4 justify-between'>
-                        <div item>
-                            <NativeSelect
-                                size='small'
-                                variant='filled'
-                                value={iBStore.categoryId}
-                                onChange={iBStore.onSelectCategory}
-                            >
-                                {iBStore.menuCategories.map(menu => (
-                                    <option key={menu.id} value={menu.shortId}>{menu.label}</option>
-                                ))}
-                            </NativeSelect>
-                        </div>
-                        <div item>
-                            <NativeSelect
-                                size='small'
-                                variant='standard'
-                                value={iBStore.subCategoryId}
-                                onChange={iBStore.onSelectSubCategory}
-                            >
-                                {menu.subCategory.filter(x => !x.version || x.version <= version).map(menu => (
-                                    <option key={menu.id} value={menu.id}>{menu.label}</option>
-                                ))}
-                            </NativeSelect>
-                        </div>
+        <div className='min-w-[200px] p-4 font-xs border-1'>
+           <div className='flex flex-col gap-1'>
+                <div className='flex flex-nowrap gap-4 items-center justify-between'>
+                    <div>
+                        <img
+                            src={store.getIconPath(props.value)}
+                            onError={store.onError}
+                            alt={String(props.value || 'None')}
+                            width={32}
+                        />
+                    </div>
+                    <div>
+                        <Input
+                            className='text-right text-xs py-1 px-2 w-full'
+                            type='number'
+                            value={props.value}
+                            onChange={store.onChangeInput}
+                        />
+                    </div>
+                </div>
+                <div className='flex flex-nowrap gap-4 justify-between'>
+                    <div>
+                        <Select
+                            value={iBStore.categoryId}
+                            onChange={iBStore.onSelectCategory}
+                        >
+                            {iBStore.menuCategories.map(menu => (
+                                <option key={menu.id} value={menu.shortId}>{menu.label}</option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div>
+                        <Select
+                            value={iBStore.subCategoryId}
+                            onChange={iBStore.onSelectSubCategory}
+                        >
+                            {menu.subCategory.filter(x => !x.version || x.version <= version).map(menu => (
+                                <option key={menu.id} value={menu.id}>{menu.label}</option>
+                            ))}
+                        </Select>
                     </div>
                 </div>
                 <div>
-                    <NativeSelect
-                        size='small'
-                        value={props.value}
+                    <Select
                         onChange={store.onSelectItem}
-                        fullWidth
+                        className='w-full'
                     >
                          <option
                             key={'none'}
@@ -112,28 +112,8 @@ const ItemSelect = observer((props: ItemSelectProps) => {
                                 style={{ backgroundColor: iBStore.getItemColor(item) }}
                             />
                         ))}
-                    </NativeSelect>
+                    </Select>
                 </div>
-               <div>
-                    <div className='flex flex-nowrap gap-4 items-center justify-between'>
-                        <div>
-                            <img
-                                src={store.getIconPath(props.value)}
-                                onError={store.onError}
-                                alt={String(props.value || 'None')}
-                                width={32}
-                            />
-                        </div>
-                        <div>
-                            <input
-                                type='number'
-                                value={props.value}
-                                style={{ fontSize: 12, textAlign:'right', padding: '2px 4px', width: '100%' }}
-                                onChange={store.onChangeInput}
-                            />
-                        </div>
-                    </div>
-               </div>
             </div>
         </div>
     );

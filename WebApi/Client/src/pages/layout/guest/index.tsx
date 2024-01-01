@@ -6,10 +6,10 @@ import Footer from '@pages/layout/guest/Footer';
 import './guest.css';
 
 const Layout = () => (
-        <section className="layout h-full w-full grid grid-cols-[240px_auto] grid-rows-[60px_auto_40px]">
+        <section className="layout h-full w-full grid grid-cols-[240px_auto] grid-rows-[60px_auto_40px] overflow-hidden">
             <Header />
             <Aside />
-            <main className='bg-[#ffffee] h-full'>
+            <main className='bg-[#ffffee] h-full overflow-y-auto'>
                 <AppRoutes />
             </main>
             <Footer />

@@ -1,23 +1,21 @@
 {
     "name": "pw-admin-csharp",
     "version": "0.1.0",
-    "description": "PWAdmin with csharp, for Perfect World server management",
+    "description": "PWAdmin with .Net, for Perfect World server management",
     "types": "./src/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "https://github.com/shadowvzs/pwAdmin3.git"
+        "url": "https://github.com/shadowvzs/pwAdmin-dotnet.git"
     },
     "main": "../wwwroot/index.js",
     "scripts": {
-        "clean": "rimraf ../wwwroot",
-        "pre-build": "npm run type-generator",
+        "clean": "shx rm '../wwwroot/*.{js,cs,html}'",
+        "pre-build": "shx rm ../wwwroot/*.{js,cs,html} && npm run type-generator && shx cp -R ./public/images ../wwwroot/images",
         "build-base": "npm run clean && npx eslint .",
         "build": "npm run pre-build && npm run build-base && cross-env NODE_ENV=production webpack --mode production",
         "build:local": "npm run pre-build:local && npm run build-base",
         "jest:test": "npx jest --runInBand . --reporters=default --reporters=jest-junit --json --coverage --testLocationInResults --outputFile=./coverage/report.json",
         "serve": "cross-env NODE_ENV=development webpack-dev-server --progress --open",
-        "build:dev": "npm run clean && cross-env NODE_ENV=development webpack",
-        "watch:dev": "npm run build:dev -- -w",
         "lint-staged": "lint-staged",
         "eslint": "npm run lint:source && npm run lint:test",
         "lint:errors": "eslint src --quiet",
@@ -110,7 +108,7 @@
         "postcss-preset-env": "^9.2.0",
         "prettier": "^3.1.1",
         "progress-bar-webpack-plugin": "^2.1.0",
-        "rimraf": "^5.0.5",
+        "shx": "^0.3.4",
         "speed-measure-webpack-plugin": "^1.5.0",
         "style-loader": "^3.3.3",
         "tailwindcss": "^3.3.6",

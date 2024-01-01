@@ -1,9 +1,8 @@
-import { useContext } from 'react';
 import { Link } from '@shadowvzs/react-view-router';
-import { AppContext } from '@app/Provider';
+import useApp from '@hooks/useApp';
 
 const Header = () => {
-    const { uiStore } = useContext(AppContext);
+    const { uiStore } = useApp();
 
     return (
         <header className='header flex justify-between items-center col-span-2 px-8 bg-slate-100'>

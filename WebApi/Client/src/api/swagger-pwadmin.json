@@ -51,23 +51,6 @@
         ],
         "parameters": [
           {
-            "name": "Instances",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          {
-            "name": "Action",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/InstanceActionEnum"
-            }
-          },
-          {
             "name": "Authorization",
             "in": "header",
             "required": true,
@@ -76,6 +59,25 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManageInstancesCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManageInstancesCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManageInstancesCommand"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success"

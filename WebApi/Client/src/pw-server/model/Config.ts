@@ -1,7 +1,8 @@
-import { BaseEntity, EntityId } from './BaseEntity';
+import { BaseEntity } from './BaseEntity';
 
-export class Config extends BaseEntity {
-    public id: EntityId;
+class Config extends BaseEntity {
     public type?: 'string' | 'json';
-    public content: string;
+    public content!: string;
 }
+
+export default Config;

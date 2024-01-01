@@ -1,13 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-// import { Button, Grid, IconButton, NativeSelect, Popover, Typography } from '@mui/material';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import { AddCircleOutline } from '@mui/icons-material';
 import { RenderComponentProps } from '@pwserver/types/builder';
 import Addon from '@pwserver/model/Addon';
-import { AddonType } from '@pwserver/types/responses';
-import { RootStoreContext } from '../../../../contexts/RootStoreContext';
-import { CollapseWrapper } from '../CollapseWrapper';
+import PW_SERVER_DATA from '@pwserver/constants/server-data';
+import { AddonTypeEnum } from '@pwserver/types/responses';
+import Input from '../core/Input';
+import Select from '../core/Select';
+import Popover from '../core/Popover';
+import { IconButton } from '../icons';
+import Button from '../core/Button';
 
 interface AddonListItemProps {
     addonDataString: string;
@@ -23,20 +24,16 @@ const AddonListItem = (props: AddonListItemProps) => {
     })[0];
 
     return (
-        <Grid container wrap='nowrap' alignItems='center' spacing={1} justifyContent='space-between' style={{ padding: '0 16px' }}>
-            <Grid item>
-                <Typography
-                    variant='body2'
-                    children={addon.$name}
-                    noWrap
-                />
-            </Grid>
-            <Grid item>
-                <IconButton size='small' onClick={onDelete}>
-                    <DeleteIcon />
-                </IconButton>
-            </Grid>
-        </Grid>
+        <div className='flex flex-nowrap items-center justify-between gap-1 px-4 w-full'>
+            <div className='text-xs'>
+                {addon.$name}
+            </div>
+            <IconButton
+                icon='delete'
+                className='text-red-600'
+                onClick={onDelete}
+            />
+        </div>
     );
 };
 
@@ -50,23 +47,21 @@ const AddonList = (props: RenderComponentProps<string[]>) => {
     }, [value, onChange]);
 
     return (
-        <Grid
-            container
-            direction='column'
-            style={{ padding: '0 16px' }}
+        <div
+            className='flex flex-col px-4'
         >
             {value.map((x, idx) => (
-                <Grid item xs={12} key={idx}>
-                    <Grid item>
+                <div key={idx}>
+                    <div>
                         <AddonListItem
                             key={idx}
                             onDelete={() => onDelete(idx)}
                             addonDataString={x}
                         />
-                    </Grid>
-                </Grid>
+                    </div>
+                </div>
             ))}
-        </Grid>
+        </div>
     );
 };
 
@@ -79,58 +74,36 @@ export const AddonSelectBase = (props: RenderComponentProps<string[]>) => {
     }, []);
 
     const onClose = React.useCallback(() => { setAnchorEl(null); }, []);
-
-    const title = `Addons (${props.value.filter(Boolean).length}): `;
-
+    const count = props.value.filter(Boolean).length;
     return (
-        <Grid container direction='column'>
-            <Grid item xs={12}>
-                <Grid
-                    container wrap='nowrap'
-                    alignItems='baseline'
-                    justifyContent='space-between'
-                    spacing={2}
-                >
-                    <Grid item>
-                        <Typography
-                            variant='body2'
-                            children={title}
-                            noWrap
-                        />
-                    </Grid>
-                    <Grid item>
-                        <IconButton
-                            size='small'
-                            title='add new addon'
-                            onClick={onOpenClick}
-                        >
-                            <AddCircleOutline />
-                        </IconButton>
-                    </Grid>
-                    <Popover
-                        open={Boolean(anchorEl)}
-                        anchorEl={anchorEl}
-                        onClose={onClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                    >
-                        <AddAddon {...props} onClose={onClose} />
-                    </Popover>
-                </Grid>
-            </Grid>
-        </Grid>
+
+        <div className='flex flex-col text-xs'>
+            <div
+                className='flex flex-nowrap items-center justify-between gap-2'
+            >
+                <div>
+                    Addons ({count}):
+                </div>
+                <IconButton
+                    title='add new addon'
+                    icon='add'
+                    onClick={onOpenClick}
+                />
+            </div>
+            <Popover
+                open={Boolean(anchorEl)}
+            >
+                <AddAddon {...props} onClose={onClose} />
+            </Popover>
+            {count > 0 && (
+                <AddonList {...props} />
+            )}
+        </div>
     );
 };
 
 export const AddAddon = observer((props: RenderComponentProps<string[]> & { onClose: () => void }) => {
-    const { pwServerStore } = React.useContext(RootStoreContext);
-    const { addons, version } = pwServerStore.data.item_extra;
+    const { addons, version } = PW_SERVER_DATA.item_extra;
     const addonList = React.useState(() => {
         const filteredAddons = addons
             .filter(x => (!x.version || x.version <= version) && !x.isHidden)
@@ -151,173 +124,130 @@ export const AddAddon = observer((props: RenderComponentProps<string[]> & { onCl
         props.onChange([addon.serialize, ...v]);
     }, [addon, props]);
 
-    const isDisabled = isNaN(addon.value1) || isNaN(addon.value2) || (
+    const isDisabled = Number.isNaN(addon.value1) || Number.isNaN(addon.value2) || (
         !addon.isSkill && addon.value1 <= 0
     ) || (
         addon.isRune && addon.value2 <= 0
     );
 
     return (
-        <Grid
-            container
-            direction='column'
+        <div
+            className='flex flex-col text-xs'
             style={{ width: 240, padding: 16 }}
         >
-            <Grid item>
-                <Typography
-                    children={`Add new addon`}
-                    variant='h6'
-                    noWrap
-                />
-            </Grid>
-            <Grid item>
-                <Grid
-                    container
-                    wrap='nowrap'
-                    alignItems='center'
-                    spacing={1}
-                >
-                    <Grid item>
-                        <Typography
-                            children={`Addon: `}
-                            variant='body2'
-                            noWrap
-                        />
-                    </Grid>
-                    <Grid item>
-                        <NativeSelect
-                            size='small'
-                            value={String(addon.id)}
-                            onChange={ev => addon.setId(parseInt(ev.currentTarget.value, 10), true)}
-                            style={{ fontSize: 12 }}
-                        >
-                            {addonList.map(addon => (
-                                <option
-                                    value={String(addon.id)}
-                                    key={addon.id}
-                                >
-                                    {addon.$name}
-                                </option>
-                            ))}
-                        </NativeSelect>
-                    </Grid>
-                </Grid>
-            </Grid>
-            {!addon.isSkill && (
-                <Grid item style={{ marginTop: 6 }}>
-                    <Grid
-                        container wrap='nowrap'
-                        alignItems='center'
-                        justifyContent='space-between'
-                        spacing={1}
+            <h4>Add new addon</h4>
+            <div
+                className='flex items-center flex-nowrap justify-between'
+            >
+                <div>
+                    Addon:
+                </div>
+                <div>
+                    <Select
+                        value={String(addon.id)}
+                        onChange={ev => addon.setId(parseInt(ev.currentTarget.value, 10), true)}
+                        style={{ fontSize: 12 }}
                     >
-                        <Grid item>
-                            <Typography
-                                variant='body2'
+                        {addonList.map(addon => (
+                            <option
+                                value={String(addon.id)}
+                                key={addon.id}
+                            >
+                                {addon.$name ?? addon.id}
+                            </option>
+                        ))}
+                    </Select>
+                </div>
+            </div>
+            {!addon.isSkill && (
+                <div style={{ marginTop: 6 }}>
+                    <div
+                        className='flex items-center justify-between gap-1 flex-nowrap'
+                    >
+                        <div>
+                            <span
                                 children={'Value'}
-                                noWrap
                             />
-                        </Grid>
-                        <Grid item>
-                            <input
+                        </div>
+                        <div>
+                            <Input
                                 type='number'
                                 max={props.config.type.includes('int32') ? 65535 : 255}
                                 style={{ width: 60, textAlign: 'right' }}
                                 value={String(addon.value1)}
-                                disabled={addon.type === AddonType.Skill}
+                                disabled={addon.type === AddonTypeEnum.Skill}
                                 onChange={ev => addon.setValue1(parseInt(ev.currentTarget.value, 10))}
                             />
-                        </Grid>
-                    </Grid>
-                </Grid>
+                        </div>
+                    </div>
+                </div>
             )}
             {addon.isRune && (
-                <Grid item style={{ marginTop: 4 }}>
-                    <Grid
-                        container wrap='nowrap'
-                        alignItems='center'
-                        justifyContent='space-between'
-                        spacing={1}
+                <div style={{ marginTop: 4 }}>
+                    <div
+                        className='flex items-center justify-between gap-1 flex-nowrap'
                     >
-                        <Grid item>
-                            <Typography
-                                variant='body2'
+                        <div>
+                            <span
                                 children={'Duration'}
-                                noWrap
                             />
-                        </Grid>
-                        <Grid item>
-                            <input
+                        </div>
+                        <div>
+                            <Input
                                 type='number'
                                 value={String(addon.value2 / timeUnit)}
                                 onChange={ev => addon.setValue2(parseInt(ev.currentTarget.value, 10) * timeUnit)}
                                 style={{ width: 50, textAlign: 'right' }}
-                                disabled={addon.type !== AddonType.Rune}
+                                disabled={addon.type !== AddonTypeEnum.Rune}
                                 min='0'
                             />
-                        </Grid>
-                        <Grid item>
-                            <NativeSelect
-                                size='small'
+                        </div>
+                        <div>
+                            <Select
                                 value={String(timeUnit)}
                                 onChange={ev => setTimeUnit(parseInt(ev.currentTarget.value, 10))}
-                                disabled={addon.type !== AddonType.Rune}
+                                disabled={addon.type !== AddonTypeEnum.Rune}
                                 style={{ fontSize: 12 }}
                             >
                                 <option value={1}>minute</option>
                                 <option value={60}>hour</option>
                                 <option value={1440}>day</option>
-                            </NativeSelect>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                            </Select>
+                        </div>
+                    </div>
+                </div>
             )}
-            <Grid item style={{ marginTop: addon.isSkill ? 16 : 8 }}>
-                <Typography
-                    variant='body2'
+            <div style={{ marginTop: addon.isSkill ? 16 : 8 }}>
+                <span
                     children={addon.$name}
                 />
-            </Grid>
+            </div>
             {addon.isSkill && (
-                <Grid item style={{ marginTop: 6 }}>
-                    <Typography
-                        variant='body2'
+                <div style={{ marginTop: 6 }}>
+                    <span
                         children={addon.description}
                     />
-                </Grid>
+                </div>
             )}
-            <Grid item style={{ marginTop: 12, textAlign: 'right' }}>
-                <Grid container justifyContent='space-around'>
-                        <Grid item>
+            <div style={{ marginTop: 12, textAlign: 'right' }}>
+                <div className='flex justify-end gap-2'>
+                        <div>
                             <Button
-                                color='primary'
-                                variant='contained'
-                                size='small'
+                                type='button'
                                 children='Add'
                                 disabled={isDisabled}
                                 onClick={onAdd}
                             />
-                        </Grid>
-                        <Grid item>
+                        </div>
+                        <div>
                             <Button
-                                color='secondary'
-                                variant='contained'
-                                size='small'
-                                children='Cancel'
+                                type='button'
+                                children='Close'
                                 onClick={props.onClose}
                             />
-                        </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+                        </div>
+                </div>
+            </div>
+        </div>
     );
 });
-
-export const AddonSelectCollapse = (props: RenderComponentProps<string[]>) => (
-        <CollapseWrapper
-            // disabled={props.value.length === 0}
-            BaseCmp={() => <AddonSelectBase {...props} />}
-            Cmp={() => <AddonList {...props} />}
-            {...props}
-        />
-    );

@@ -8,9 +8,10 @@ namespace Application.dto
     [Flags]
     public enum UserRankEnum : int
     {
-        MEMBER = 0,
-        GM = 0x1 << 0,
-        ADMIN = 0x1 << 1,
+        NONE = 0,
+        MEMBER = 0x1 << 0,
+        GM = 0x1 << 1,
+        ADMIN = 0x1 << 2,
     }
 
     public class UserDto

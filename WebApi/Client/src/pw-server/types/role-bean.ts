@@ -1,4 +1,4 @@
-import * as Role from "./role-bean-data";
+import * as Role from './role-bean-data';
 
 export interface IRoleBean {
     base: Role.Base;

@@ -1,23 +1,14 @@
 import { observer } from 'mobx-react-lite';
 import { action, makeObservable, observable } from 'mobx';
-// import { makeStyles } from '@mui/styles';
-// import { Grid } from '@mui/material';
-import { IComplexOctetCategories } from '@pwserver/types/responses';
+import type { IComplexOctetCategories } from '@pwserver/types/responses';
 import { RenderComponentProps } from '@pwserver/types/builder';
 import { ClassMaskBuilderPopover } from './ClassMaskBuilder';
 import ItemBuilderStore from '../ItemBuilderStore';
 import NumberSelect from './octet/NumberSelect';
 import TextSelect from './octet/TextSelect';
 import ComboSelect from './octet/ComboSelect';
-import { SocketSelectCollapse } from './octet/SocketSelect';
-import { AddonSelectCollapse } from './octet/AddonSelect';
-
-const useStyles = makeStyles({
-    root: {
-        padding: '0 16px',
-        maxWidth: '100%'
-    },
-});
+import { SocketSelectBase } from './octet/SocketSelect';
+import { AddonSelectBase } from './octet/AddonSelect';
 
 export interface OctetBuilderProps {
     store: ItemBuilderStore;
@@ -40,13 +31,12 @@ const RenderComponentMap: Record<string, (props: RenderComponentProps<any>) => J
     NumberSelect,
     ComboSelect,
     TextSelect,
-    SocketSelect: SocketSelectCollapse,
-    AddonSelect: AddonSelectCollapse
+    SocketSelect: SocketSelectBase,
+    AddonSelect: AddonSelectBase,
+    PetSkillSelect: AddonSelectBase,
 };
 
 export const OctetBuilder = observer((props: OctetBuilderProps) => {
-
-    const classes = useStyles();
     const iBStore = props.store;
     const oFields = iBStore.octetUIData;
     const [cat, subCat] = iBStore.getCategories();
@@ -57,7 +47,7 @@ export const OctetBuilder = observer((props: OctetBuilderProps) => {
     ));
 
     return (
-        <Grid container direction='column' className={classes.root}>
+        <div className='flex flex-col gap-1 px-4 max-w-[100%]'>
             {usedFields.map(x => {
                 const Cmp = RenderComponentMap[x.render!];
                 return (
@@ -71,6 +61,6 @@ export const OctetBuilder = observer((props: OctetBuilderProps) => {
                     />
                 );
             })}
-        </Grid>
+        </div>
     );
 });

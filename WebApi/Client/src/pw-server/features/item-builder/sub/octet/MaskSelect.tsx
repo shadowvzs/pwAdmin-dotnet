@@ -1,7 +1,8 @@
 import React from 'react';
 
+import PW_SERVER_DATA from '@pwserver/constants/server-data';
 import { PopoverWrapper } from '../PopoverWrapper';
-import { RootStoreContext } from '../../../../contexts/RootStoreContext';
+import Input from '../core/Input';
 
 interface MaskSelectsProps {
     value: number;
@@ -9,8 +10,7 @@ interface MaskSelectsProps {
 }
 
 export const MaskSelect = (props: MaskSelectsProps) => {
-    const { pwServerStore } = React.useContext(RootStoreContext);
-    const { equipments, version } = pwServerStore.data.item_extra;
+    const { equipments, version } = PW_SERVER_DATA.item_extra;
 
     const onChange = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         const t = ev.currentTarget;
@@ -19,53 +19,32 @@ export const MaskSelect = (props: MaskSelectsProps) => {
     }, [props]);
 
     return (
-        <Grid container direction='column' className='text-xs px-4'>
-            <Grid item>
-                <Typography
-                    variant='h6'
-                    children='Mask: '
-                />
-            </Grid>
-            <Grid item>
-                <RadioGroup
-                    aria-label="mask"
-                    name="mask"
-                    value={props.value}
-                    onChange={onChange}
-                    style={{ flexDirection: 'row' }}
-                >
+        <div className='flex flex-col text-xs p-4 gap-4'>
+            <div>
+                <h4 className='text-base' children='Mask: ' />
+            </div>
+            <div className='grid grid-cols-2'>
                 {equipments.filter(x => !x.version || x.version <= version).map(x => (
-                        <FormControlLabel
-                            style={{ flexBasis: '50%', margin: 0 }}
-                            control={
-                                <Radio
-                                    value={x.mask}
-                                    color='primary'
-                                    size='small'
-                                    style={{ padding: 2 }}
-                                />
-                            }
-                            label={(
-                                <Typography
-                                    children={x.name}
-                                    noWrap
-                                    title={x.name}
-                                    style={{ maxWidth: 80, fontSize: 12 }}
-                                />
-                            )}
+                    <div className='flex gap-2 items-center' key={x.id}>
+                        <input
+                            type='radio'
+                            value={x.mask}
+                            onChange={onChange}
+                            name="mask"
+                            checked={props.value === x.mask}
                         />
-
+                        <label className='text-xs max-w-[80px] whitespace-nowrap'>{x.name}</label>
+                    </div>
                 ))}
-                </RadioGroup>
-                <Grid item key='value' style={{ padding: 8, textAlign: 'right' }}>
-                    <input
-                        disabled
-                        value={String(props.value || 0)}
-                        style={{ padding: '2px 4px', width: 100, textAlign:'right' }}
-                    />
-                </Grid>
-            </Grid>
-        </Grid>
+            </div>
+            <div key='value' className='text-right flex justify-end'>
+                <Input
+                    disabled
+                    value={String(props.value || 0)}
+                    style={{ padding: '2px 4px', width: 100, textAlign:'right' }}
+                />
+            </div>
+        </div>
     );
 };
 

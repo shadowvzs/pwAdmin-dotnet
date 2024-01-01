@@ -1,6 +1,5 @@
 import React from 'react';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Collapse, Grid } from '@mui/material';
+import { IconButton } from './icons';
 
 export interface CollapseWrapperProps<T> {
     value: T;
@@ -11,7 +10,7 @@ export interface CollapseWrapperProps<T> {
     disabled?: boolean;
 }
 
-export const CollapseWrapper = (props: CollapseWrapperProps<any>) => {
+export function CollapseWrapper<T>(props: CollapseWrapperProps<T>) {
     const [open, setOpen] = React.useState<boolean>(false);
     const {
         BaseCmp,
@@ -20,32 +19,29 @@ export const CollapseWrapper = (props: CollapseWrapperProps<any>) => {
         ...rest
     } = props;
 
-    const onToggle = React.useCallback((event: React.MouseEvent<Element>) => {
+    const onToggle = React.useCallback((_event: React.MouseEvent<Element>) => {
         setOpen(!open);
     }, [open]);
 
-    const buttonProps = {
-        onClick: disabled ? undefined : onToggle,
-        disabled,
-        style: { opacity: disabled ? 0.56 : 1 }
-    };
-    const expandButton = open ? <ExpandLess {...buttonProps} /> : <ExpandMore {...buttonProps} />;
-
     return (
-        <Grid container spacing={0} justifyContent='space-between' alignItems='center'>
-            <Grid item xs={12}>
-                <Grid container alignItems='center' wrap='nowrap'>
-                    <Grid item xs={12}>
-                        <BaseCmp />
-                    </Grid>
-                    <Grid item style={{ alignSelf: 'baseline' }}>
-                        {expandButton}
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Collapse in={open} timeout="auto" unmountOnExit style={{ width: '100%' }}>
-                <Cmp {...rest} />
-            </Collapse>
-        </Grid>
+        <div className='flex flex-col'>
+            <div className='flex items-center flex-nowrap w-full'>
+                <div className='flex items-center justify-between w-full'>
+                    <BaseCmp />
+                </div>
+                <IconButton
+                    size={20}
+                    icon={open ? 'collapse' : 'expand'}
+                    onClick={disabled ? undefined : onToggle}
+                    style={{ opacity: disabled ? 0.56 : 1 }}
+                    disabled={disabled}
+                />
+            </div>
+            {open && (
+                <div className='w-full'> {/* open and close */}
+                    <Cmp {...rest} />
+                </div>
+            )}
+        </div>
     );
 };

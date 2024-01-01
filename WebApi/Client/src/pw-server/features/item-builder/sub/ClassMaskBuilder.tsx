@@ -1,22 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
 
-import { Checkbox, FormControlLabel, Grid, Typography } from '@mui/material';
+import PW_SERVER_DATA from '@pwserver/constants/server-data';
 import { PopoverWrapper } from './PopoverWrapper';
-import { RootStoreContext } from '../../../contexts/RootStoreContext';
-
-const useStyles = makeStyles({
-    root: {
-        minWidth: 200,
-        padding: 16,
-    },
-    input: {
-        width: 50,
-        textAlign: 'right',
-        padding: '2px 4px',
-        marginTop: 2
-    }
-});
+import Input from './core/Input';
 
 interface ClassMaskProps {
     value: number;
@@ -26,10 +12,7 @@ interface ClassMaskProps {
 }
 
 export const ClassMaskBuilder = (props: ClassMaskProps) => {
-
-    const { pwServerStore } = React.useContext(RootStoreContext);
-    const { maxClass, maxMask, classes: pwClasses } = pwServerStore.data.classes;
-    const classes = useStyles();
+    const { maxClass, maxMask, classes: pwClasses } = PW_SERVER_DATA.classes;
 
     const onCheckboxChange = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         const { value, onChange } = props;
@@ -40,56 +23,52 @@ export const ClassMaskBuilder = (props: ClassMaskProps) => {
         onChange(newMask);
     }, [props]);
 
-    const onToggleAll = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
+    const onToggleAll = React.useCallback((_ev: React.ChangeEvent<HTMLInputElement>) => {
         const { value, onChange } = props;
         const newMask = value === maxMask ? 0 : maxMask;
         onChange(newMask);
     }, [props, maxMask]);
 
     return (
-        <Grid className={classes.root}>
-           <Grid container>
+        <div className='min-w-[200px] p-4'>
+           <div>
                 {!props.hideTitle && (
-                    <Grid item xs={12}>
-                        <Typography style={{ fontSize: 18 }} gutterBottom children={'Class Mask'} />
-                    </Grid>
+                    <div className='text-lg'>
+                        Class Mask
+                    </div>
                 )}
-                {pwClasses.slice(0, maxClass).map(x => (
-                    <Grid item key={x.mask} xs={6}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={Boolean(props.value & x.mask)}
-                                    onChange={onCheckboxChange}
-                                    value={x.mask}
-                                    color='primary'
-                                    size='small'
-                                    style={{ padding: 4 }}
-                                />
-                            }
-                            label={<Typography children={x.name} style={{ fontSize: 12 }} />}
-                        />
-                    </Grid>
-                ))}
-                <Grid item key='all' xs={6}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={Boolean(props.value === maxMask)}
-                                onChange={onToggleAll}
-                                color='primary'
-                                size='small'
-                                style={{ padding: 4 }}
+                <div className='grid grid-cols-2 gap-1 py-2'>
+                    {pwClasses.slice(0, maxClass).map(x => (
+                        <div key={x.mask} className='flex gap-2 items-center'>
+                            <input
+                                type='checkbox'
+                                checked={Boolean(props.value & x.mask)}
+                                value={x.mask}
+                                onChange={onCheckboxChange}
                             />
-                        }
-                        label={<Typography style={{ fontSize: 12 }} children={'Select All'} />}
-                    />
-                </Grid>
-                <Grid item key='value' xs={6}>
-                    <input disabled value={String(props.value || 0)} className={classes.input} />
-                </Grid>
-            </Grid>
-        </Grid>
+                            <label className='text-xs'>
+                                {x.name}
+                            </label>
+                        </div>
+                    ))}
+                    <div key='all' className='flex gap-2 items-center'>
+                        <input
+                            type='checkbox'
+                            checked={Boolean(props.value === maxMask)}
+                            onChange={onToggleAll}
+                        />
+                        <label className='text-xs'>
+                            Select All
+                        </label>
+                    </div>
+                </div>
+                <div key='value' className='flex justify-end'>
+                    <div>
+                        <Input disabled value={String(props.value || 0)} />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 

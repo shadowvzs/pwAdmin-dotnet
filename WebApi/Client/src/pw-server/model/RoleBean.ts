@@ -3,13 +3,13 @@ import { Base, Status, Inventory, Equipments, Banker, Tasks } from '../types/rol
 import { EntityId } from './BaseEntity';
 
 export class RoleBean implements IRoleBean {
-    public id: EntityId;
-    public base: Base;
-    public status: Status;
-    public inventory: Inventory;
-    public equipments: Equipments;
-    public banker: Banker;
-    public tasks: Tasks;
+    public id!: EntityId;
+    public base!: Base;
+    public status!: Status;
+    public inventory!: Inventory;
+    public equipments!: Equipments;
+    public banker!: Banker;
+    public tasks!: Tasks;
 }
 
 export interface UserRoleItem {

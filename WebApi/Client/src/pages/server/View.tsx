@@ -14,6 +14,8 @@ export interface IView extends ViewStore {
 }
 
 class View extends ViewStore<ViewInjector> implements IView {
+    private timerId = 0;
+
     @observable
     public serverStatuses: Servers['checkInstancesStatus']['Response'] = [];
 
@@ -41,7 +43,6 @@ class View extends ViewStore<ViewInjector> implements IView {
             instances: [id],
             action: instance.isRunning ? InstanceActionEnum.STOP : InstanceActionEnum.START
         });
-        this.fetchServerStatuses();
     };
 
     public onToggleServerStatus = async (ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -56,16 +57,15 @@ class View extends ViewStore<ViewInjector> implements IView {
                 instances: [app.id],
                 action: InstanceActionEnum.START
             });
-            // eslint-disable-next-line no-await-in-loop
-            await this.fetchServerStatuses();
         }
     };
 
     private fetchServerStatuses = async () => {
         const { serverService } = this.injectedData.app;
         this.setIsLoading(true);
-        const responese = await serverService.checkInstancesStatus({ instances: [] })
-            .finally(() => { this.setIsLoading(false); });
+        const responese = await serverService
+            .checkInstancesStatus({ instances: [] })
+                .finally(() => { this.setIsLoading(false); });
         this.setServerStatuses(responese);
     };
 
@@ -78,8 +78,19 @@ class View extends ViewStore<ViewInjector> implements IView {
     public beforeMount() {
         const { user } = this.injectedData.app.userService;
         if (!user) { this.router.history.navigate('/'); }
-        this.fetchServerStatuses();
+        this.startTimer();
     }
+
+    public beforeUnmount() {
+        clearInterval(this.timerId);
+    }
+
+    private startTimer = () => {
+        if (this.timerId) { clearInterval(this.timerId); }
+        this.timerId = window.setInterval(() => {
+            this.fetchServerStatuses();
+        }, 2000);
+    };
 }
 
 export default View;

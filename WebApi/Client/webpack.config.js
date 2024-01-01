@@ -28,7 +28,7 @@ const productionPlugins = [
         chunkFilename: '[id].[fullhash].css',
     }),
     new HtmlWebpackPlugin({
-        template: './index.html',
+        template: './public/index.html',
         filename: 'index.html',
         inject: true,
     }),
@@ -82,9 +82,6 @@ module.exports = {
         path: path.resolve(__dirname, '../wwwroot'),
         publicPath: 'auto',
         filename: development ? '[name].js' : '[name].[fullhash].js',
-        // publicPath: 'http://localhost:5000/',
-        // libraryTarget: 'umd',
-        // library: 'PWAdmin',
     },
 
     resolve: {

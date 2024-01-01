@@ -1,24 +1,26 @@
 import { action, makeObservable, observable } from 'mobx';
 import type { IArrayValueMap } from '@utility/arrayValueMap';
-import { PW_STORE_DATA } from '../constants/core';
+import PW_SERVER_DATA from '@pwserver/constants/server-data';
 import type { IAddonData, IComplexOctetCategories, IStatData } from '../types/responses';
 
 class Addon implements IAddonData {
 
     public static create(data: IAddonData) {
         const addon = Object.assign(new Addon(), {...data});
-        if (data.id && PW_STORE_DATA.item_extra) {
+        if (data.id && PW_SERVER_DATA.item_extra) {
             addon.setId(data.id);
         }
         return addon;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     public get addons(): IArrayValueMap<Addon> {
-        return PW_STORE_DATA.item_extra.addons;
+        return PW_SERVER_DATA.item_extra.addons;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     public get stats(): IArrayValueMap<IStatData> {
-        return PW_STORE_DATA.item_extra.stats;
+        return PW_SERVER_DATA.item_extra.stats;
     }
 
     // public static create(addons: IArrayValueMap<IAddonData>, stats: IArrayValueMap<IStatData[]>, value: string) {
@@ -30,10 +32,10 @@ class Addon implements IAddonData {
     //     addon.setValue2(parseInt(value2, 10));
     // }
 
-    public id: number;
+    public id!: number;
     public name?: string;
-    public version: number;
-    public type: number;
+    public version!: number;
+    public type!: number;
     public isHidden?: boolean;
 
     // for skills
@@ -59,7 +61,7 @@ class Addon implements IAddonData {
         Object.assign(this, {...this.addons.valueMap[id]});
         if (!setValueToo) { return; }
         if (this.isSkill) {
-            const [v1, v2] = this.data?.split(' ')!;
+            const [v1, v2] = this.data?.split(' ') || [];
             this.setValue1(parseInt(v1, 10));
             this.setValue2(parseInt(v2, 10));
         } else {
@@ -69,8 +71,7 @@ class Addon implements IAddonData {
     }
 
     public get $name(): string {
-        const { statType } = PW_STORE_DATA.item_extra;
-
+        const { statType } = PW_SERVER_DATA.item_extra;
         if (this.isSkill) {
             return this.name || '';
         } if (!this.value1) {

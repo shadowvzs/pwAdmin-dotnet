@@ -1,26 +1,8 @@
 import React from 'react';
-import { Grid, TextField, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
 import { observer } from 'mobx-react-lite';
-import { PopoverWrapper } from './PopoverWrapper';
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 200,
-        padding: 16,
-    },
-    input: {
-        width: '100px',
-        textAlign: 'right',
-        padding: '2px 4px',
-        marginTop: 2,
-        marginRight: 50
-    },
-    select: {
-        fontSize: 12
-    }
-});
+import { PopoverWrapper } from './PopoverWrapper';
+import Input from './core/Input';
 
 interface ExpireDateSelectProps {
     value: number;
@@ -30,47 +12,36 @@ interface ExpireDateSelectProps {
 }
 
 export const ExpireDateSelect = observer((props: ExpireDateSelectProps) => {
-
-    const classes = useStyles();
-
     const onChange = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(ev.currentTarget.value || '0', 10);
         props.onChange(value);
     }, [props]);
 
     return (
-        <Grid className={classes.root}>
-           <Grid container>
-                {!props.hideTitle && (
-                    <Grid item xs={12}>
-                        <Typography style={{ fontSize: 18 }} gutterBottom children={'Expire'} />
-                    </Grid>
-                )}
-
-                <Grid item xs={12}>
-                    <Typography style={{ fontSize: 12 }} children={'Expire'} />
-                    <TextField
-                        size='small'
-                        label="Next appointment"
-                        type="datetime-local"
-                        defaultValue="2017-05-24T10:30"
-                        onChange={onChange}
-                    />
-                </Grid>
-
-                <Grid item key='value' xs={6}>
-                    <Grid container justifyContent='center'>
-                        <Grid item>
-                            <input
-                                disabled
-                                value={props.value}
-                                className={classes.input}
-                            />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+        <div className='flex flex-col text-xs gap-2 p-4'>
+            <div className='text-lg'>
+                <span children={'Expire'} />
+            </div>
+            <div className='flex gap-2 justify-between'>
+                <label className='whitespace-nowrap' htmlFor='expire-date-select'>
+                    Next appointment
+                </label>
+                <Input
+                    id='expire-date-select'
+                    className='text-xs'
+                    type="datetime-local"
+                    defaultValue="2017-05-24T10:30"
+                    onChange={onChange}
+                />
+            </div>
+            <div className='flex justify-end'>
+                <Input
+                    className='text-right'
+                    disabled
+                    defaultValue={props.value}
+                />
+            </div>
+        </div>
     );
 });
 

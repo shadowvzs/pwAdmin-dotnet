@@ -1,15 +1,6 @@
 import React from 'react';
-
 import { observer } from 'mobx-react-lite';
-import { makeStyles } from '@mui/styles';
-import { Grid, Typography } from '@mui/material';
-
-const useStyles = makeStyles({
-    root: {
-        fontSize: 12,
-        padding: '0 16px'
-    }
-});
+import Input from './core/Input';
 
 interface CountSelectsProps {
     value1: number;
@@ -18,55 +9,51 @@ interface CountSelectsProps {
 }
 
 const CountSelect = observer((props: CountSelectsProps) => {
-    const classes = useStyles();
-
     const onChange = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = ev.currentTarget;
-        const v = isNaN((parseInt(value, 10))) ? 0 : parseInt(value, 10);
+        const v = Number.isNaN((parseInt(value, 10))) ? 0 : parseInt(value, 10);
         props.onChange(v);
     }, [props]);
 
     return (
-        <Grid container className={classes.root} spacing={2}>
-            <Grid item xs={6}>
-                <Grid container wrap='nowrap' alignItems='center' spacing={1}>
-                    <Grid item>
-                        <Typography
-                            variant='body2'
+        <div className='text-xs px-4 flex gap=2'>
+            <div>
+                <div className='flex flex-nowrap items-center gap-1'>
+                    <div>
+                        <span
                             children='Qty.: '
                         />
-                    </Grid>
-                    <Grid item>
-                        <input
+                    </div>
+                    <div>
+                        <Input
                             name='guid1'
                             type='number'
                             value={props.value1}
                             style={{ fontSize: 12, width: 50, padding: '2px 4px' }}
                             onChange={onChange}
                         />
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item xs={6}>
-                <Grid container wrap='nowrap' alignItems='center' spacing={1}>
-                    <Grid item>
-                        <Typography
-                            variant='body2'
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div className='flex flex-nowrap items-center gap-1'>
+                    <div>
+                        <span
                             children='Max: '
                         />
-                    </Grid>
-                    <Grid item>
-                        <input
+                    </div>
+                    <div>
+                        <Input
                             readOnly
                             disabled
                             type='number'
-                            value={props.value2}
+                            defaultValue={props.value2}
                             style={{ fontSize: 12, width: 50, padding: '2px 4px' }}
                         />
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 });
 

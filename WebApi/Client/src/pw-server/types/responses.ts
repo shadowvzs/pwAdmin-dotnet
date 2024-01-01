@@ -56,10 +56,9 @@ export interface IAddonTypes {
     name: string;
 }
 
-
 export type IComplexOctetCategories = 'W' | 'A' | 'J' | 'B' | 'M';
 
-export enum AddonType {
+export enum AddonTypeEnum {
     Normal = 1,
     Skill = 2,
     Rune = 3
@@ -107,7 +106,7 @@ export interface IOctetBuilderFieldsData {
     flag: number | string; // we got with number values then we replace it with string
     fields: string[];
     multiplier?: number;
-    conditionalValue?: Record<string, any>;
+    conditionalValue?: Record<string, number>;
     defaultValue?: (number | string) | (number | string)[];
     showInput?: boolean;
     min?: number;
@@ -136,7 +135,7 @@ export interface IOctetBuilderValueMapData extends IOctetBuilderData{
 //     profiles: IArrayValueMap<IOctetBuilderConfigsData>;
 // }
 
-export interface IRefineBaseData { 
+export interface IRefineBaseData {
     id: number;
     octetName: 'pDmg' | 'mDmg' | 'hp' | 'pDef' | 'mDef' | 'dodge';
     grade: { value: number; addonId: number; }[]; // 0-20 (gr0-20)
@@ -199,7 +198,7 @@ export interface IItemExtraValueMapData extends IItemExtraData {
 export interface IItemData {
     id: number;
     color: number;
-    octetData?: Record<IOctetKeys, any>;
+    octetData?: Record<IOctetKeys, object>;
     data1?: string;
     data2?: string;
     grade: number;
@@ -319,7 +318,6 @@ export interface IClassStaticData {
     commonSkills: ISkillData[];
 }
 
-
 export interface IClassDataWithValueMap extends IClassData {
     id: number;
     mask: number;
@@ -343,12 +341,12 @@ export interface IClassStaticDataWithValueMap extends IClassStaticData {
 }
 
 export interface ISkillTextData {
-    id: number; 
-    name: string; 
+    id: number;
+    name: string;
     description: string;
 }
 
-export interface IPwStoreData {
+export interface IPwServerData {
     classes: IClassStaticDataWithValueMap;
     item_db: IArrayValueMap<IItemData>;
     item_extra: IItemExtraValueMapData;

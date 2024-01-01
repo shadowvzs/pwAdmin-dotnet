@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Route } from '@shadowvzs/react-view-router';
-import { AppContext } from '@app/Provider';
+import useApp from '@hooks/useApp';
 
 const Footer = observer(() => {
-    const ctx = useContext(AppContext);
+    const ctx = useApp();
     console.log(ctx);
     // const isMobile = uiStore.isMobile;
 

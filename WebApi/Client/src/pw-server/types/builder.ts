@@ -2,7 +2,12 @@ import type { IComplexOctetCategories, IOctetBuilderFieldsData } from './respons
 
 export type IOctetFields = 'lvReq16'|'lvReq32'|'grade16'|'grade32'|'classReq'|'pDmgRange'|'mDmgRange'|'pAttack'|'mAttack'|'strReq'|
     'agiReq'|'intReq'|'conReq'|'durability'|'itemType'|'itemFlag'|'ammo'|'aSpeed'|'range'|'minRange'|'socket'|'addon'|'crafter'|
-    'hp'|'mp'|'hp'|'dodge'|'pDef'|'wStat'|'wType'|'metalDef'|'woodDef'|'waterDef'|'fireDef'|'earthDef'|'dodge' | 'emptyInt32';
+    'hp'|'mp'|'dodge'|'pDef'|'wStat'|'wType'|'metalDef'|'woodDef'|'waterDef'|'fireDef'|'earthDef'|'emptyInt32';
+
+export interface OctetChunk {
+    label: string;
+    value: string;
+}
 
 export interface IWeaponOctet {
     lvReq: number;
@@ -77,7 +82,7 @@ export interface IJewelOctet {
     addon: string[];
 }
 
-export interface IBlessBoxOctet extends IArmorOctet {}
+export type IBlessBoxOctet = IArmorOctet;
 
 export interface IFlyerOctet {
     flyerFuel: [number, number];
@@ -88,9 +93,10 @@ export interface IFlyerOctet {
     flyerSpeed: [number, number];
     flyerUnknown2: number;
     flyerUnknown3: number;
-    flyerUnknown4: number;  
+    flyerUnknown4: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 export type IOctetData = IWeaponOctet & IArmorOctet & IJewelOctet & IBlessBoxOctet;
 export type IOctetKeys = keyof IOctetData;
 

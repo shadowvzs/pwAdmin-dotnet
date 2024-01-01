@@ -1,69 +1,55 @@
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import ItemBuilderStore from '../../ItemBuilderStore';
+
+import { IconButton } from '@pwserver/features/item-builder/sub/icons/';
+import type { OctetChunk } from '@pwserver/types/builder';
 
 interface OctetPreviewProps {
-    store: ItemBuilderStore;
+    octets: OctetChunk[];
 }
 
-const OctetPreview = observer((props: OctetPreviewProps) => {
-
-    const {store} = props;
+const OctetPreview = ({ octets }: OctetPreviewProps) => {
     const inputRef = React.useRef<HTMLInputElement>();
-    const { enqueueSnackbar } = useSnackbar();
 
     const onCopyToClipboard = React.useCallback(() => {
-        const i = inputRef.current!;
+        const i = inputRef.current;
+        if (!i) { return null; }
+        i.value = octets.map(x => x.value).join('');
         i.select();
         i.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(i.value);
-        enqueueSnackbar('Octet was copied to clipboard!', { variant: 'success' });
-    }, [inputRef, enqueueSnackbar]);
+        alert('Octet was copied to clipboard!');
+    }, [inputRef, octets]);
 
     return (
-        <Grid container style={{ marginTop: 16 }}>
-            <Grid item xs={12}>
-                <Typography
-                    variant='body2'
-                    children='Final Octet:'
+        <div className='mt-4 text-xs'>
+            <div className='flex gap-2 whitespace-nowrap'>
+                Final Octet:
+                <input
+                    className='hidden'
+                    type='text'
+                    ref={e => { inputRef.current = e!; }}
                 />
-            </Grid>
-            <Grid item xs={12}>
-                <Input
-                    fullWidth
-                    type={'text'}
-                    value={store.item.data}
-                    inputProps={{ ref: inputRef }}
-                    style={{ marginTop: 6, fontSize: 12 }}
-                    endAdornment={(
-                        <InputAdornment position="end">
-                            <IconButton
-                                onClick={onCopyToClipboard}
-                                edge='end'
-                                children={<ContentCopyIcon style={{ fontSize: 18 }} />}
-                                size='small'
-                                title='Copy octet to clipboard'
-                            />
-                        </InputAdornment>
-                    )}
-                />
-            </Grid>
-            <Grid
-                item
-                style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap' }}
-                xs={12}
+            </div>
+            <div
+                className='flex flex-wrap mt-2 gap-1'
             >
-                {store.finalOctetData.map((x, idx) => (
+                {octets.map((x, idx) => (
                     <span
                         key={idx}
-                        className={classes.octetChunk}
                         title={x.label}
                         children={x.value}
+                        className='hover:text-blue-400 hover:text-bold transition-all'
                     />
                 ))}
-            </Grid>
-        </Grid>
+                <IconButton
+                    icon='copy'
+                    title='Copy'
+                    size={18}
+                    onClick={onCopyToClipboard}
+                />
+            </div>
+        </div>
     );
-});
+};
 
 export default OctetPreview;

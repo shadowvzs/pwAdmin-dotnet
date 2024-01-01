@@ -38,7 +38,7 @@ namespace Application.Servers
                 for (var i = instances.Count - 1; i >= 0; i--)
                 {
                     ManageInstance(instances[i], request.Action);
-                    await Task.Delay(1000);
+                    await Task.Delay(100);
                 }
 
                 return Unit.Value;

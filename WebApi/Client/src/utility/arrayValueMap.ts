@@ -6,21 +6,21 @@ export interface IArrayValueMap<T> extends Array<T> {
     add: (item: T) => void;
     remove: (primaryKey: string | number) => void;
     setValues: (array: T[]) => void;
-    filter: (predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => IArrayValueMap<T>; 
+    filter: (predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => IArrayValueMap<T>;
 }
 
 export class ArrayValueMap<T> extends Array<T> implements IArrayValueMap <T> {
 
     public static create<T>(initArray?: T[], pKey = 'id') {
         const arr = new ArrayValueMap<T>();
-        arr[primaryKey] = pKey
+        arr[primaryKey] = pKey;
         if (Array.isArray(initArray)) {
             arr.setValues(initArray);
         }
         return arr;
     }
 
-    public [primaryKey]: string;
+    public [primaryKey]!: string;
     public valueMap: Record<string | number, T> = {};
 
     public setValues(arr: T[]) {

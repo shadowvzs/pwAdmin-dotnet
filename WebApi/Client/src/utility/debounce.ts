@@ -1,6 +1,6 @@
-const timers: Map<string, number> = new Map();
+const timers: Map<string, number> = new Map<string, number>();
 
-export const debounce = (key: string, timeout: number, fn: Function, params?: any[]) => {
+const debounce = (key: string, timeout: number, fn: Function, params?: unknown[]) => {
     if (timers.has(key)) {
         window.clearTimeout(timers.get(key));
         timers.delete(key);
@@ -14,4 +14,6 @@ export const debounce = (key: string, timeout: number, fn: Function, params?: an
     }, timeout);
 
     timers.set(key, tId);
-}
+};
+
+export default debounce;

@@ -24,9 +24,13 @@ class View extends ViewStore<ViewInjector> implements IView {
 
     beforeMount(): void {
         const { serverService } = this.injectedData.app;
-        serverService.details().then(data => {
-            this.setServerDetails(data);
-        });
+        serverService.details()
+            .then(data => {
+                this.setServerDetails(data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 }
 

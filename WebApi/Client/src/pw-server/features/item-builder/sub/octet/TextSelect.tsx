@@ -1,9 +1,9 @@
 import React from 'react';
 
 import type { RenderComponentProps } from '@pwserver/types/builder';
+import Input from '../core/Input';
 
 const TextSelect = (props: RenderComponentProps<string>) => {
-    const classes = useStyles();
     const { value, onChange, config } = props;
 
     const onChangeHandler = React.useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -11,26 +11,22 @@ const TextSelect = (props: RenderComponentProps<string>) => {
     }, [onChange]);
 
     return (
-        <Grid container className='text-xs' alignItems='center' justifyContent='space-between'>
-            <Grid item>
-                <Typography
-                    variant='body2'
-                    children={config.label}
-                />
-            </Grid>
-            <Grid item>
-                <Grid container spacing={1} justifyContent='flex-end'>
-                    <Grid item>
-                        <input
+        <div className='flex text-xs items-center justify-between'>
+            <div className='whitespace-nowrap'>
+                {config.label}
+            </div>
+            <div>
+                <div className='flex justify-end gap-1'>
+                    <div>
+                        <Input
                             type='text'
                             value={value || ''}
                             onChange={onChangeHandler}
-                            className={classes.input}
                         />
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Grid>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 
